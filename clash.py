@@ -51,7 +51,7 @@ def zsh_aliases(args):
         for index, line in enumerate(lines):
             if line.find("alias clash") != -1:
                 default = 'alias clash="/media/trunk/sata/download/clash/clash-0.20.11/cfw &"'
-                lines[index] = default.replace("0.20.11", args.version)
+                lines[index] = default.replace("0.20.11", args.version)+"\n"
                 f.seek(0)
                 f.writelines(lines)
                 return

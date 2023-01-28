@@ -32,7 +32,7 @@ def parse_arguments(argv):
     parser.add_argument('--scene', type=str, help="指定某个场景eg.1_1")
     parser.add_argument('--fusion_ws', type=Path, help="传感器融合代码workspace",
                         default=os.path.expanduser(
-                            "~/work/code/fusion_ws/"))
+                            "~/work/code/target_fusion_ws/"))
     parser.add_argument('--output', type=Path, help="输出路径metrics仓库里的data/fusion",
                         default=os.path.expanduser(
                             "~/work/code/metricslidarperception/data/fusion"))
