@@ -181,7 +181,7 @@ def save(args, scene: str = "1_1", type: str = "json"):
     if out_dir.is_dir():
         shutil.rmtree(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    for json_file in args.output.glob("*."+type):
+    for json_file in args.output.glob("1*."+type):
         shutil.copy2(json_file, out_dir)
         os.remove(json_file)
 
