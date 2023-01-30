@@ -17,6 +17,8 @@ scenes = ["1_1", "1_3", "1_4",
           "6_1", "6_3", "6_5", "6_6", "6_8",
           "7_1", "7_2", "7_3",
           "8_1", "8_2", "8_3"]
+scenes_0802 = ["01_1", "02_1", "03_1", "04_1", "05_1", "06_1",
+               "07_1", "08_1", "09_1", "10_1", "11_1", "12_1", "13_1"]
 
 
 def parse_arguments(argv):
@@ -116,22 +118,18 @@ def launch(args, bag_scene: str = "1_1", obj_scene: str = "1_1", launch_flag: bo
     bag: str = str(args.bags) + "/scene" + bag_scene + suffix
     obj: str = str(args.objs) + "/scene" + obj_scene + suffix
     bag_play: str = "rosbag play --clock " + bag + " " + \
-        obj + " /target_fusion/Objects:=/lll"
+        obj + """ --topics /ARS430_input /hadmap_server/current_region \
+            /perception/odometry /pnc_msgs/vehicle_info /tf \
+            /LFCr5tpRadarMsg /LRCr5tpRadarMsg /RFCr5tpRadarMsg /RRCr5tpRadarMsg \
+            /clock /perception/objects"""
     if launch_flag:
         subprocess.check_call(
             "roslaunch target_fusion sensor_fusion_offline_L4.launch &", shell=True)
         time.sleep(12)
         subprocess.check_call(bag_play, shell=True)
-        # /dev/video0/compressed:=/v0 /dev/video1/compressed:=/v1 \
-        # /dev/video2/compressed:=/v2 /dev/video3/compressed:=/v3 \
-        # /dev/video4/compressed:=/v4 /dev/video5/compressed:=/v5 \
-        # /dev/video6/compressed:=/v6 /dev/video7/compressed:=/v7
+
     else:
         subprocess.check_call(bag_play, shell=True)
-        # /dev/video0/compressed:=/v0 /dev/video1/compressed:=/v1 \
-        # /dev/video2/compressed:=/v2 /dev/video3/compressed:=/v3 \
-        # /dev/video4/compressed:=/v4 /dev/video5/compressed:=/v5 \
-        # /dev/video6/compressed:=/v6 /dev/video7/compressed:=/v7
 
 
 def output(sensorfusion_dir: Path, output_dir: Path) -> bool:
@@ -195,7 +193,13 @@ if __name__ == '__main__':
     else:
         build(args.fusion_ws)
         output(args.fusion_ws, args.output)
-        for scene in scenes:
-            subprocess.check_call("clear", shell=True)
-            launch(args, scene, scene)
-            save(args, scene)
+        if 'without' in str(args.bags):  # 0613 bags
+            for scene in scenes:
+                subprocess.check_call("clear", shell=True)
+                launch(args, scene, scene)
+                save(args, scene)
+        else:  # 0802 bags
+            for scene in scenes_0802:
+                subprocess.check_call("clear", shell=True)
+                launch(args, scene, scene)
+                save(args, scene)
