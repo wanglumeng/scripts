@@ -42,6 +42,8 @@ def parse_arguments(argv):
                         default="/media/trunk/sata/bag/hota_0613/bag_data_without_obj")
     parser.add_argument('--objs', type=Path, help="lidar目标bag路径",
                         default="/media/trunk/sata/bag/hota_0613/perception_objs")
+    parser.add_argument('--vision', type=Path, help="vision bag路径",
+                        default="/media/trunk/sata/bag/hota_0613/cov_output_res")
     return parser.parse_args(argv)
 
 
@@ -80,12 +82,12 @@ def calibration(file: Path):
         with open(file, 'r+') as f:
             lines = f.readlines()
             for index, line in enumerate(lines):
-                xreplace(lines, index, "#define TRANSLATION_X", 5.48)
+                xreplace(lines, index, "#define TRANSLATION_X", 5.36)
                 xreplace(lines, index, "#define TRANSLATION_Y", 0.0)
                 xreplace(lines, index, "#define TRANSLATION_Z", 0.65)
                 xreplace(lines, index, "#define ROTATION_ROLL", 0.0)
                 xreplace(lines, index, "#define ROTATION_PITCH", 0.0)
-                xreplace(lines, index, "#define ROTATION_YAW", 0.48)
+                xreplace(lines, index, "#define ROTATION_YAW", 1.0)
             f.seek(0)
             f.writelines(lines)
     else:
@@ -117,11 +119,12 @@ def launch(args, bag_scene: str = "1_1", obj_scene: str = "1_1", launch_flag: bo
     """
     bag: str = str(args.bags) + "/scene" + bag_scene + suffix
     obj: str = str(args.objs) + "/scene" + obj_scene + suffix
+    vision: str = str(args.vision) + "/scene" + obj_scene + suffix
     bag_play: str = "rosbag play --clock " + bag + " " + \
-        obj + """ --topics /ARS430_input /hadmap_server/current_region \
+        obj + " " + vision + """ --topics /ARS430_input /hadmap_server/current_region \
             /perception/odometry /pnc_msgs/vehicle_info /tf \
             /LFCr5tpRadarMsg /LRCr5tpRadarMsg /RFCr5tpRadarMsg /RRCr5tpRadarMsg \
-            /clock /perception/objects"""
+            /clock /perception/objects /vision_lanes /vision_objects /hesai/pandar_points"""
     if launch_flag:
         subprocess.check_call(
             "roslaunch target_fusion sensor_fusion_offline_L4.launch &", shell=True)
