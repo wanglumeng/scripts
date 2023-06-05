@@ -56,6 +56,19 @@ def zsh_aliases(args):
                 f.writelines(lines)
                 return
 
+def autostart(args):
+    autostart_file = "/home/trunk/.config/autostart/cfw.desktop"
+    with open(autostart_file, 'r+') as f:
+        lines = f.readlines()
+        for index, line in enumerate(lines):
+            if line.find("Exec") != -1:
+                default = '/media/trunk/sata/download/clash/clash-0.20.21/cfw'
+                lines[index] = default.replace("0.20.21", args.version)+"\n"
+                f.seek(0)
+                f.writelines(lines)
+                return
+
+
 
 if __name__ == '__main__':
     args = parse_arguments(sys.argv[1:])

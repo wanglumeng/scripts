@@ -30,6 +30,5 @@ fi
 
 for i in $(ls ${ROOT}/gta_3d_tracking_${split}_image*.zip);do
     echo $i
-    # exit 0
-    unzip $i -d ${OUTPUT}/${split}/image
+    unzip $i -d ${OUTPUT}/${split}/image & # nearly parallel
 done

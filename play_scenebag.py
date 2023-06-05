@@ -34,7 +34,7 @@ def parse_arguments(argv):
     parser.add_argument('--scene', type=str, help="指定某个场景eg.1_1")
     parser.add_argument('--fusion_ws', type=Path, help="传感器融合代码workspace",
                         default=os.path.expanduser(
-                            "~/work/code/target_fusion_ws/"))
+                            "~/work/code/tad_soc_release/"))
     parser.add_argument('--output', type=Path, help="输出路径metrics仓库里的data/fusion",
                         default=os.path.expanduser(
                             "~/work/code/metricslidarperception/data/fusion"))
@@ -43,7 +43,7 @@ def parse_arguments(argv):
     parser.add_argument('--objs', type=Path, help="lidar目标bag路径",
                         default="/media/trunk/sata/bag/hota_0613/perception_objs")
     parser.add_argument('--vision', type=Path, help="vision bag路径",
-                        default="/media/trunk/sata/bag/hota_0613/cov_output_res")
+                        default="/media/trunk/sata/bag/hota_0613/vision_objs")
     return parser.parse_args(argv)
 
 
@@ -101,10 +101,10 @@ def build(fusion_ws: Path):
         fusion_ws (Path): source code
     """
     calibration(
-        fusion_ws/"src/fusion/src/sensors/calibration/calibration.cpp")
+        fusion_ws/"src/target_fusion/src/sensors/calibration/calibration.cpp")
     os.chdir(fusion_ws)
     subprocess.check_call("catkin clean -y", shell=True)
-    subprocess.check_call("catkin build", shell=True)
+    subprocess.check_call("catkin build target_fusion", shell=True)
     os.chdir(os.curdir)
 
 
@@ -122,12 +122,12 @@ def launch(args, bag_scene: str = "1_1", obj_scene: str = "1_1", launch_flag: bo
     vision: str = str(args.vision) + "/scene" + obj_scene + suffix
     bag_play: str = "rosbag play --clock " + bag + " " + \
         obj + " " + vision + """ --topics /ARS430_input /hadmap_server/current_region \
-            /perception/odometry /pnc_msgs/vehicle_info /tf \
+            /perception/odometry /pnc_msgs/vehicle_info2 /tf \
             /LFCr5tpRadarMsg /LRCr5tpRadarMsg /RFCr5tpRadarMsg /RRCr5tpRadarMsg \
-            /clock /perception/objects /vision_lanes /vision_objects /hesai/pandar_points"""
+            /clock /perception/objects /vision_lanes /vision_objects"""
     if launch_flag:
         subprocess.check_call(
-            "roslaunch target_fusion sensor_fusion_offline_L4.launch &", shell=True)
+            "roslaunch target_fusion sensor_fusion_offline.launch &", shell=True)
         time.sleep(12)
         subprocess.check_call(bag_play, shell=True)
 
@@ -145,7 +145,7 @@ def output(sensorfusion_dir: Path, output_dir: Path) -> bool:
     Returns:
         bool: True for has *.json(rm *.json)
     """
-    toml = sensorfusion_dir / "src/fusion/params/track_config.toml"
+    toml = sensorfusion_dir / "src/target_fusion/params/track_config.toml"
     with open(toml, 'r+') as file:
         lines = file.readlines()
         for index, line in enumerate(lines):
@@ -188,9 +188,20 @@ def save(args, scene: str = "1_1", type: str = "json"):
         shutil.copy2(json_file, out_dir)
         os.remove(json_file)
 
+def load_topics(args):
+    import time
+    subprocess.check_call("roscore&", shell=True)
+    time.sleep(5)
+    subprocess.check_call("ls " + str(args.fusion_ws) + "/entry/config/*.yaml | xargs -I @ rosparam load @", shell=True)
+    subprocess.check_call("rosparam set /function/log/level 4", shell=True) #error level
+
+def hmi(args):
+    subprocess.check_call("roslaunch hmi hmi_horizontal.launch", shell=True)
 
 if __name__ == '__main__':
     args = parse_arguments(sys.argv[1:])
+    load_topics(args)
+    hmi(args)
     if args.scene:  # play 1 scene
         launch(args, args.scene, args.scene, False)  # only play bag
     else:
