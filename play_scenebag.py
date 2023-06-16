@@ -91,7 +91,7 @@ def calibration(file: Path):
             f.seek(0)
             f.writelines(lines)
     else:
-        raise Exception("calibration.cpp file error!")
+        raise Exception(f"calibration.cpp file error!\n{file}")
 
 
 def build(fusion_ws: Path):
@@ -101,9 +101,10 @@ def build(fusion_ws: Path):
         fusion_ws (Path): source code
     """
     calibration(
-        fusion_ws/"src/target_fusion/src/sensors/calibration/calibration.cpp")
+        fusion_ws/"src/perception/target_fusion/src/sensors/calibration/calibration.cpp")
     os.chdir(fusion_ws)
     subprocess.check_call("catkin clean -y", shell=True)
+    subprocess.check_call("catkin install", shell=True)
     subprocess.check_call("catkin build target_fusion", shell=True)
     os.chdir(os.curdir)
 
@@ -145,7 +146,7 @@ def output(sensorfusion_dir: Path, output_dir: Path) -> bool:
     Returns:
         bool: True for has *.json(rm *.json)
     """
-    toml = sensorfusion_dir / "src/target_fusion/params/track_config.toml"
+    toml = sensorfusion_dir / "src/perception/target_fusion/params/track_config.toml"
     with open(toml, 'r+') as file:
         lines = file.readlines()
         for index, line in enumerate(lines):
@@ -155,7 +156,7 @@ def output(sensorfusion_dir: Path, output_dir: Path) -> bool:
                 lines[index] = "logPath = \"" + str(output_dir) + "\"\n"
         file.seek(0)
         file.writelines(lines)
-    source = "source "+str(sensorfusion_dir)+"/devel/setup.bash"
+    source = "source "+str(sensorfusion_dir)+"/install/setup.zsh"
     # subprocess.check_call(source, shell=True)
     rm = "rm -r "+str(output_dir)+"/*.json"
     print(os.listdir(output_dir))
@@ -201,7 +202,7 @@ def hmi(args):
 if __name__ == '__main__':
     args = parse_arguments(sys.argv[1:])
     load_topics(args)
-    hmi(args)
+    #hmi(args)
     if args.scene:  # play 1 scene
         launch(args, args.scene, args.scene, False)  # only play bag
     else:
