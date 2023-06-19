@@ -105,7 +105,7 @@ def build(fusion_ws: Path):
     os.chdir(fusion_ws)
     subprocess.check_call("catkin clean -y", shell=True)
     subprocess.check_call("catkin install", shell=True)
-    subprocess.check_call("catkin build target_fusion", shell=True)
+    subprocess.check_call("catkin build target_fusion hmi", shell=True)
     os.chdir(os.curdir)
 
 
