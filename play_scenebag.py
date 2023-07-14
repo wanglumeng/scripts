@@ -100,8 +100,8 @@ def build(fusion_ws: Path):
     Args:
         fusion_ws (Path): source code
     """
-    calibration(
-        fusion_ws/"src/perception/target_fusion/src/sensors/calibration/calibration.cpp")
+    # calibration(
+    #     fusion_ws/"src/perception/target_fusion/src/sensors/calibration/calibration.cpp")
     os.chdir(fusion_ws)
     subprocess.check_call("catkin clean -y", shell=True)
     subprocess.check_call("catkin install", shell=True)
@@ -206,7 +206,7 @@ if __name__ == '__main__':
     if args.scene:  # play 1 scene
         launch(args, args.scene, args.scene, False)  # only play bag
     else:
-        build(args.fusion_ws)
+        # build(args.fusion_ws)
         output(args.fusion_ws, args.output)
         if 'without' in str(args.bags):  # 0613 bags
             for scene in scenes:
