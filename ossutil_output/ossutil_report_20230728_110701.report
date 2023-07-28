@@ -1,0 +1,1 @@
+# ossutil64 cp -r oss://trunk-case/Case/20230727/沪FL7238/event_20230727162042/ /media/trunk/sata/bag/VTBJ/VTI-+8614 --include man* --include *common*
