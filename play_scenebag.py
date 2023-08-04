@@ -125,7 +125,7 @@ def launch(args, bag_scene: str = "1_1", obj_scene: str = "1_1", launch_flag: bo
         obj + " " + vision + """ --topics /ARS430_input /hadmap_server/current_region \
             /perception/odometry /pnc_msgs/vehicle_info2 /tf \
             /LFCr5tpRadarMsg /LRCr5tpRadarMsg /RFCr5tpRadarMsg /RRCr5tpRadarMsg \
-            /clock /perception/objects /vision_lanes /vision_objects \
+            /clock /perception/objects /vision_lanes /vision_objects /vision_f30_objects \
             /hadmap_server/current_region /hadmap_server/local_map /pnc_msgs/vehicle_state"""
     if launch_flag:
         subprocess.check_call(
