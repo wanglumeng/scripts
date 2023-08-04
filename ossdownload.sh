@@ -22,7 +22,7 @@ download() {
     local=$1
     remote=$2
     echo -e "remote path: ${remote}"
-    ossutil64 cp -r ${remote} ${local} --include "man*" --include "*common*"
+    ossutil64 cp -r ${remote} ${local} --include "man*" --include "*common*" --include "target_fusion*.log"
 }
 
 if [ $# -eq 2 ];then

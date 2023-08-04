@@ -104,7 +104,7 @@ def build(fusion_ws: Path):
     #     fusion_ws/"src/perception/target_fusion/src/sensors/calibration/calibration.cpp")
     os.chdir(fusion_ws)
     subprocess.check_call("catkin clean -y", shell=True)
-    subprocess.check_call("catkin install", shell=True)
+    # subprocess.check_call("catkin install", shell=True)
     subprocess.check_call("catkin build target_fusion", shell=True)
     os.chdir(os.curdir)
 
@@ -157,7 +157,7 @@ def output(sensorfusion_dir: Path, output_dir: Path) -> bool:
                 lines[index] = "logPath = \"" + str(output_dir) + "\"\n"
         file.seek(0)
         file.writelines(lines)
-    source = "source "+str(sensorfusion_dir)+"/install/setup.zsh"
+    source = "source "+str(sensorfusion_dir)+"/devel/setup.zsh"
     # subprocess.check_call(source, shell=True)
     rm = "rm -r "+str(output_dir)+"/*.json"
     print(os.listdir(output_dir))
