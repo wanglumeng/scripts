@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+sudo apt-get purge apport -y
+echo -e "kernel.core_uses_pid = 1\nkernel.core_pattern = /var/trunk/TrunkPilot/db/core/core.%e.%s.%h.%p.%t" | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
+
+ulimit -c unlimited

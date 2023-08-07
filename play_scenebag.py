@@ -9,17 +9,9 @@ import subprocess
 from pathlib import Path
 
 suffix = "*.bag"
-scenes = ["1_1", "1_3", "1_4",
-          "2_1", "2_2", "2_3",
-          "3_1", "3_2", "3_3",
-          "4_1", "4_2", "4_3",
-          "5_1", "5_3",
-          "6_1", "6_3", "6_5", "6_6", "6_8",
-          "7_1", "7_2", "7_3",
-          "8_1", "8_2", "8_3"]
 scenes_0802 = ["01_1", "02_1", "03_1", "04_1", "05_1", "06_1",
                "07_1", "08_1", "09_1", "10_1", "11_1", "12_1", "13_1"]
-
+scenes_rain = ["13-29", "13-30", "13-34", "11-36", "13-41"]
 
 def parse_arguments(argv):
     """parse arguments
@@ -31,7 +23,7 @@ def parse_arguments(argv):
         args: arguments
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument('--scene', type=str, help="指定某个场景eg.1_1")
+    parser.add_argument('--scene', type=str, help="指定某个场景eg.01_1")
     parser.add_argument('--fusion_ws', type=Path, help="传感器融合代码workspace",
                         default=os.path.expanduser(
                             "~/work/code/tad_soc_release/"))
@@ -44,6 +36,9 @@ def parse_arguments(argv):
                         default="/media/trunk/sata/bag/hota_0613/perception_objs")
     parser.add_argument('--vision', type=Path, help="vision bag路径",
                         default="/media/trunk/sata/bag/hota_0613/vision_objs")
+    parser.add_argument('--vision_side', type=Path, help="vision_side bag路径",
+                        default="/media/trunk/sata/bag/hota_0613/vision_side_objs")
+
     return parser.parse_args(argv)
 
 
@@ -96,7 +91,7 @@ def calibration(file: Path):
 
 def build(fusion_ws: Path):
     """build after modifying calibration paramters
-
+y
     Args:
         fusion_ws (Path): source code
     """
@@ -109,23 +104,24 @@ def build(fusion_ws: Path):
     os.chdir(os.curdir)
 
 
-def launch(args, bag_scene: str = "1_1", obj_scene: str = "1_1", launch_flag: bool = True):
+def launch(args, bag_scene: str = "01_1", launch_flag: bool = True):
     """launch target_fusion, play data_bag+obj_bag
 
     Args:
         args (_type_): runtime arguments(include bags for bag_path, objs for obj_bag_path)
-        bag_scene (str, optional): data(without lidar obj) scene number. Defaults to "1_1".
-        obj_scene (str, optional): lidar object bag scene number. Defaults to "1_1".
+        bag_scene (str, optional): data(without lidar obj) scene number. Defaults to "01_1".
         launch_flag (bool, optional): if launch target_fusion node. Defaults to True.
     """
     bag: str = str(args.bags) + "/scene" + bag_scene + suffix
-    obj: str = str(args.objs) + "/scene" + obj_scene + suffix
-    vision: str = str(args.vision) + "/scene" + obj_scene + suffix
+    obj: str = str(args.objs) + "/scene" + bag_scene + suffix
+    vision: str = str(args.vision) + "/scene" + bag_scene + suffix
+    vision_side: str = str(args.vision_side) + "/scene" + bag_scene + suffix
     bag_play: str = "rosbag play --clock " + bag + " " + \
-        obj + " " + vision + """ --topics /ARS430_input /hadmap_server/current_region \
+        obj + " " + vision + " " + vision_side + """ --topics /ARS430_input /hadmap_server/current_region \
             /perception/odometry /pnc_msgs/vehicle_info2 /tf \
             /LFCr5tpRadarMsg /LRCr5tpRadarMsg /RFCr5tpRadarMsg /RRCr5tpRadarMsg \
             /clock /perception/objects /vision_lanes /vision_objects /vision_f30_objects \
+            /visual_side_perception_results/left /visual_side_perception_results/right \
             /hadmap_server/current_region /hadmap_server/local_map /pnc_msgs/vehicle_state"""
     if launch_flag:
         subprocess.check_call(
@@ -205,17 +201,11 @@ if __name__ == '__main__':
     load_topics(args)
     #hmi(args)
     if args.scene:  # play 1 scene
-        launch(args, args.scene, args.scene, False)  # only play bag
+        launch(args, args.scene, False)  # only play bag
     else:
         # build(args.fusion_ws)
         output(args.fusion_ws, args.output)
-        if 'without' in str(args.bags):  # 0613 bags
-            for scene in scenes:
-                subprocess.check_call("clear", shell=True)
-                launch(args, scene, scene)
-                save(args, scene)
-        else:  # 0802 bags
-            for scene in scenes_0802:
-                subprocess.check_call("clear", shell=True)
-                launch(args, scene, scene)
-                save(args, scene)
+        for scene in scenes_0802:
+            subprocess.check_call("clear", shell=True)
+            launch(args, scene)
+            save(args, scene)
