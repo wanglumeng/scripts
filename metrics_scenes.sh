@@ -18,7 +18,6 @@ function run_metrics() {
         sed -i -r 's%pred_path: .*%pred_path: '"\"${fusionpath}/${scene}\""'%' ${metrics_script_root}/config/object_eval.yaml
         sed -i -r 's%data_type: .*%data_type: '"\"tracked_objs\""'%' ${metrics_script_root}/config/object_eval.yaml
         sed -i -r 's%metrics_result_path: .*%metrics_result_path: '"\"${metrics_output_data_root}/${scene}\""'%' ${metrics_script_root}/config/object_eval.yaml
-
         python3 "${metrics_script_path}"/metrics/eval/track_evaluate.py
     done
 }

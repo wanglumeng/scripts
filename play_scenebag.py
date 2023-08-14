@@ -151,6 +151,8 @@ def output(args, scene: str = 'common', index: str = "01_1") -> bool:
     Returns:
         bool: True for has *.json(rm *.json)
     """
+    if scene == 'common':
+        index = 'scene' + index
     bag_path = list(args.bags.glob(scene + '/*' + index + "*.bag"))
     output_dir: Path = args.output / scene / bag_path[0].name
     print(f"current output_dir is: {output_dir}")
