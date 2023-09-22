@@ -125,12 +125,13 @@ def launch(args, scene: str = 'common', index: str = "01_1", launch_flag: bool =
     vision_side: str = str(args.vision_side) + "/" + \
         scene+"/*" + index + suffix
     bag_play: str = "rosbag play --clock " + bag + " " + \
-        obj + " " + vision + " " + vision_side + """ --topics /ARS430_input /hadmap_server/current_region \
+        obj + " " + vision + " " + vision_side + """ --topics /ARS430_input /hadmap_server/drivable_areas \
             /perception/odometry /pnc_msgs/vehicle_info2 /tf \
             /LFCr5tpRadarMsg /LRCr5tpRadarMsg /RFCr5tpRadarMsg /RRCr5tpRadarMsg \
             /clock /perception/objects /vision_lanes /vision_objects /vision_f30_objects \
             /visual_side_perception_results/left /visual_side_perception_results/right \
-            /hadmap_server/current_region /hadmap_server/local_map /pnc_msgs/vehicle_state"""
+            /hadmap_server/current_region /hadmap_server/local_map /pnc_msgs/vehicle_state /libfusion/dr \
+            /perception/odometry:=/libfusion/dr"""
     if launch_flag:
         subprocess.check_call(
             "roslaunch target_fusion sensor_fusion_offline.launch &", shell=True)

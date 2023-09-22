@@ -1,2 +1,3 @@
 core
 *_compressed
+__pycache__
