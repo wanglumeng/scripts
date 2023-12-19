@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -ex
+set -ex # -e:exit when error, -x: print
 
 ROOT="/media/trunk/NAS_new/datasets/gta5/zip"
 OUTPUT="/media/trunk/NAS_new/datasets/gta5/unzip"
