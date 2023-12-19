@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Specify the root path where you want to search for 'output' directories
 root_path="/home/trunk/work/code/target_fusion_lib"
