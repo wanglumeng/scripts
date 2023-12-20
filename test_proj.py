@@ -5,8 +5,17 @@ from img3d import IMG3D
 import json
 import numpy as np
 
-
 def draw_img_3dbox(canvas, color, track_loc, img3d_instance):
+    """
+    brief: draw image 3d box
+    input: 
+        1. canvas
+        2. color
+        3. track_loc
+        4. img3d_instance
+    output:
+        canvas
+    """
     # format track loc info
     b_p = BoxProcessor(img3d_instance)
     canvas = b_p.project_r3d_to_image(canvas, b_p.convert_aabb_to_box({
