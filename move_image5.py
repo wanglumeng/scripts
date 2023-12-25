@@ -6,6 +6,16 @@ from pathlib import Path
 
 
 def move_image5(in_dir: Path, dir_name: str, out_name: str):
+    """move image5 to camera_f60
+
+    Args:
+        in_dir(Path): input path
+        dir_name(str): image5
+        out_name(str): camera_f60
+
+    Returns:
+        None
+    """
     paths = [x for x in in_dir.iterdir() if x.is_dir()
              and (x / dir_name).exists()]  # input dir/paths/image_5
     for p in paths:
