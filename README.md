@@ -1,5 +1,6 @@
 # scripts
 > little scripts that can run without dependency
+> some has comments and help messages
 
 ## languages
 1. shell scripts
