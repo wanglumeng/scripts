@@ -1,4 +1,5 @@
 # scripts
+> little scripts that can run without dependency
 
 ## languages
 1. shell scripts
