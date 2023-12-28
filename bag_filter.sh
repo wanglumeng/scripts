@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+# usage:
+# modify in_dir & out_dir
+# ./ run it
+
+# 用途：
+# delete topic: /pnc_msgs/vehicle_state
+
 in_dir="/home/nvidia/data/ssd/zyq/work/metricslidarperception/bag_data_at128_v4/rain/"
 out_dir="/home/nvidia/data/ssd/wlm/bag/rain/"
 
