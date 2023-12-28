@@ -4,6 +4,7 @@
 1. shell scripts
 2. python
 3. some config files(yml or json)
+4. .vscode debug config
 
 ## usage
 most can run without parameters  
