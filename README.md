@@ -9,7 +9,7 @@ most can run without parameters
 some can run with parameters  
 read the code itself  
 
-## tree
+## file tree
 ```bash
 .
 ├── alacritty.yml
