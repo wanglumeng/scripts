@@ -3,7 +3,7 @@
 ## languages
 1. shell scripts
 2. python
-3. some config files(yml)
+3. some config files(yml or json)
 
 ## usage
 most can run without parameters  
