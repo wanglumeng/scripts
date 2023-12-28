@@ -9,6 +9,8 @@ from pathlib import Path
 """
 this is a script to unzip clash archive and install
 help message can be shown when run it without parameters
+
+clash itself is deprecated
 """
 
 
