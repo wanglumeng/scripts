@@ -12,7 +12,7 @@ some can run with parameters
 read the code itself  
 their function message will updating soon  
 
-## file tree
+## files tree
 ```bash
 .
 ├── alacritty.yml
