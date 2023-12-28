@@ -6,6 +6,11 @@ import shutil
 import sys
 from pathlib import Path
 
+"""
+this is a script to unzip clash archive and install
+help message can be shown when run it without parameters
+"""
+
 
 def parse_arguments(argv):
     """parse arguments
